@@ -51,7 +51,7 @@ public final class Bounds {
 
   /**
    * Return the values of this {@code Bounds} object in the form
-   * {@code [min().lon(), min().lat(), max().lon(), max().lat()]}.
+   * {@code [min.longitude, min.latitude, max.longitude, max.latitude]}.
    */
   public double[] toArray() {
     return new double[] {
