@@ -102,3 +102,6 @@ jar {
     props.store(propsFile.newWriter(), null)
   }
 }
+
+/* Travis trigger */
+check.dependsOn jacocoTestReport
