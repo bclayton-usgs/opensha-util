@@ -96,6 +96,7 @@ jar {
     /* record app version */
     def props = new Properties()
     def propsFile = new File(project.buildDir.toString() + propsPath)
+    propsFile.getParentFile().mkdirs()
     propsFile.createNewFile()
     props.setProperty('app.version', gitTag)
     props.store(propsFile.newWriter(), null)
