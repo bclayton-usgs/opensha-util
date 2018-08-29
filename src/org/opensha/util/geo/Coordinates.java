@@ -2,9 +2,9 @@ package org.opensha.util.geo;
 
 import static org.opensha.util.data.DoubleData.checkInRange;
 
-import org.opensha.util.Maths;
-
 import com.google.common.collect.Range;
+
+import org.opensha.util.Maths;
 
 /**
  * Constants and utility methods pertaining to geographic coordinates.
@@ -40,32 +40,17 @@ public class Coordinates {
    */
   public static final double EARTH_RADIUS_POLAR = 6356.7523;
 
-  /** Supported longitudes: {@code (-360..360)°}. */
-  public static final Range<Double> LON_RANGE = Range.open(-360.0, 360.0);
-
   /** Supported latitudes: {@code [-90..90]°}. */
   public static final Range<Double> LAT_RANGE = Range.closed(-90.0, 90.0);
 
-  /** Supported depths: {@code [-5..700] km}. */
-  public static final Range<Double> DEPTH_RANGE = Range.closed(-5.0, 700.0);
+  /** Supported longitudes: {@code (-360..360)°}. */
+  public static final Range<Double> LON_RANGE = Range.open(-360.0, 360.0);
 
-/** Constant for arcminutes per degree: {@code 60″}. */
+  /** Constant for arcminutes per degree: {@code 60″}. */
   public static final double MINUTES_PER_DEGREE = 60;
 
   /** Constant for arcseconds per degree: {@code 3600′}. */
   public static final double SECONDS_PER_DEGREE = 3600;
-
-  /**
-   * Ensure that {@code -360° < longitude < 360°}.
-   *
-   * @param longitude to validate
-   * @return the validated longitude
-   * @throws IllegalArgumentException if {@code longitude} is outside the range
-   *         {@code (-360..360)°}
-   */
-  public static double checkLongitude(double longitude) {
-    return checkInRange(LON_RANGE, "Longitude", longitude);
-  }
 
   /**
    * Ensure that {@code -90° ≤ latitude ≤ 90°}.
@@ -80,15 +65,15 @@ public class Coordinates {
   }
 
   /**
-   * Ensure {@code -5 ≤ depth ≤ 700 km}.
-   * 
-   * @param depth to validate
-   * @return the validated depth
-   * @throws IllegalArgumentException if {@code depth} is outside the range
-   *         {@code [-5..700] km}
+   * Ensure that {@code -360° < longitude < 360°}.
+   *
+   * @param longitude to validate
+   * @return the validated longitude
+   * @throws IllegalArgumentException if {@code longitude} is outside the range
+   *         {@code (-360..360)°}
    */
-  public static double checkDepth(double depth) {
-    return checkInRange(DEPTH_RANGE, "Depth", depth);
+  public static double checkLongitude(double longitude) {
+    return checkInRange(LON_RANGE, "Longitude", longitude);
   }
 
   /**
@@ -147,7 +132,7 @@ public class Coordinates {
    * @param seconds to convert
    * @return the equivalent number of decimal degrees
    */
-  public static double secondsToDegrees(double seconds) {
+  public static double secondsToDeg(double seconds) {
     return seconds / SECONDS_PER_DEGREE;
   }
 
@@ -157,7 +142,7 @@ public class Coordinates {
    * @param minutes to convert
    * @return the equivalent number of decimal degrees
    */
-  public static double minutesToDegrees(double minutes) {
+  public static double minutesToDeg(double minutes) {
     return minutes / MINUTES_PER_DEGREE;
   }
 
@@ -169,8 +154,8 @@ public class Coordinates {
    * @return the equivalent number of decimal degrees
    */
   public static double toDecimalDegrees(double degrees, double minutes) {
-    return (degrees < 0) ? (degrees - minutesToDegrees(minutes))
-        : (degrees + minutesToDegrees(minutes));
+    return (degrees < 0) ? (degrees - minutesToDeg(minutes))
+        : (degrees + minutesToDeg(minutes));
   }
 
 }
