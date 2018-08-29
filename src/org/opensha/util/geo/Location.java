@@ -18,7 +18,7 @@ import com.google.common.primitives.Doubles;
 /**
  * A {@code Location} represents a point with reference to the earth's
  * ellipsoid. It is expressed in terms of longitude and latitude in decimal
- * degrees, and depth in km. As in seismology, the convention adopted in here is
+ * degrees, and depth in km. As in seismology, the convention adopted here is
  * for depth to be positive-down, always. Locations may be defined using
  * longitude values in the range: [-180°, 360°]. Location instances are
  * immutable.
