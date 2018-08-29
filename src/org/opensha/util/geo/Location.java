@@ -1,9 +1,12 @@
 package org.opensha.util.geo;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.opensha.util.geo.Coordinates.checkDepth;
+import static org.opensha.util.Earthquakes.checkDepth;
 import static org.opensha.util.geo.Coordinates.checkLatitude;
 import static org.opensha.util.geo.Coordinates.checkLongitude;
+
+import java.util.List;
+import java.util.Objects;
 
 import org.opensha.util.Maths;
 
@@ -11,9 +14,6 @@ import com.google.common.base.Converter;
 import com.google.common.base.Splitter;
 import com.google.common.collect.FluentIterable;
 import com.google.common.primitives.Doubles;
-
-import java.util.List;
-import java.util.Objects;
 
 /**
  * A {@code Location} represents a point with reference to the earth's
@@ -23,10 +23,10 @@ import java.util.Objects;
  * longitude values in the range: [-180°, 360°]. Location instances are
  * immutable.
  *
- * <p>Note that static factory methods take arguments in the order:
- * {@code [lon, lat, depth]}, consistent with {@code String} representations
- * used in KML, GeoJSON, and other digital coordinate formats that match
- * standard plotting coordinate order: {@code [x, y, z]}.
+ * <p>Note that constructors and static factory methods take arguments in the
+ * order: {@code [lat, lon, depth]}, which is inconsistent with {@code String}
+ * representations used in KML, GeoJSON, and other digital coordinate formats
+ * that match standard plotting coordinate order: {@code [x, y, z]}.
  *
  * @author Peter Powers
  */
@@ -43,21 +43,44 @@ public final class Location implements Comparable<Location> {
    * radian formatted values for computational efficiency.
    */
 
-  /** The longitude of this {@code Location} in decimal degrees. */
-  public final double longitude;
-
   /** The latitude of this {@code Location} in decimal degrees. */
   public final double latitude;
+
+  /** The longitude of this {@code Location} in decimal degrees. */
+  public final double longitude;
 
   /** The depth of this {@code Location} in kilometers. */
   public final double depth;
 
-  final double lonRad;
   final double latRad;
+  final double lonRad;
 
-  private Location(double longitude, double latitude, double depth) {
-    this.longitude = checkLongitude(longitude);
+  /**
+   * Create a new {@code Location} with the supplied longitude, latitude, and
+   * depth. This constructor is provided for backward compatibility but may be
+   * removed in a future release. Please use {@link #create(double, double)}
+   * instead.
+   * 
+   * @param latitude
+   * @param longitude
+   */
+  public Location(double latitude, double longitude) {
+    this(latitude, longitude, 0.0);
+  }
+
+  /**
+   * Create a new {@code Location} with the supplied longitude, latitude, and
+   * depth. This constructor is provided for backward compatibility but may be
+   * removed in a future release. Please use
+   * {@link #create(double, double, double)} instead.
+   * 
+   * @param latitude
+   * @param longitude
+   * @param depth
+   */
+  public Location(double latitude, double longitude, double depth) {
     this.latitude = checkLatitude(latitude);
+    this.longitude = checkLongitude(longitude);
     this.depth = checkDepth(depth);
     this.lonRad = longitude * Maths.TO_RADIANS;
     this.latRad = latitude * Maths.TO_RADIANS;
@@ -67,27 +90,27 @@ public final class Location implements Comparable<Location> {
    * Create a new {@code Location} with the supplied longitude and latitude and
    * a depth of 0 km.
    *
-   * @param longitude in decimal degrees
    * @param latitude in decimal degrees
+   * @param longitude in decimal degrees
    * @throws IllegalArgumentException if any supplied values are out of range
    * @see Coordinates
    */
-  public static Location create(double longitude, double latitude) {
-    return create(longitude, latitude, 0);
+  public static Location create(double latitude, double longitude) {
+    return create(latitude, longitude, 0);
   }
 
   /**
    * Create a new {@code Location} with the supplied longitude, latitude, and
    * depth.
    *
-   * @param longitude in decimal degrees
    * @param latitude in decimal degrees
+   * @param longitude in decimal degrees
    * @param depth in km (positive down)
    * @throws IllegalArgumentException if any supplied values are out of range
    * @see Coordinates
    */
-  public static Location create(double longitude, double latitude, double depth) {
-    return new Location(longitude, latitude, depth);
+  public static Location create(double latitude, double longitude, double depth) {
+    return new Location(latitude, longitude, depth);
   }
 
   /**
@@ -149,7 +172,7 @@ public final class Location implements Comparable<Location> {
           .from(SPLITTER.split(checkNotNull(s)))
           .transform(Doubles.stringConverter())
           .toList();
-      return create(values.get(0), values.get(1), values.get(2));
+      return create(values.get(1), values.get(0), values.get(2));
     }
   }
 
@@ -187,7 +210,9 @@ public final class Location implements Comparable<Location> {
    */
   @Override
   public int compareTo(Location loc) {
-    double d = (latitude == loc.latitude) ? longitude - loc.longitude : latitude - loc.latitude;
+    double d = (latitude == loc.latitude)
+        ? longitude - loc.longitude
+        : latitude - loc.latitude;
     return (d != 0) ? (d < 0) ? -1 : 1 : 0;
   }
 
