@@ -497,7 +497,7 @@ public final class Locations {
     double cosD = cos(ad);
     double lat2 = asin(sinLat1 * cosD + cosLat1 * sinD * cos(az));
     double lon2 = lon + atan2(sin(az) * sinD * cosLat1, cosD - sinLat1 * sin(lat2));
-    return Location.create(lon2 * Maths.TO_DEGREES, lat2 * Maths.TO_DEGREES, depth + Δv);
+    return Location.create(lat2 * Maths.TO_DEGREES, lon2 * Maths.TO_DEGREES, depth + Δv);
   }
 
   /**
@@ -607,7 +607,7 @@ public final class Locations {
       cDepth += loc.depth;
       size++;
     }
-    return Location.create(cLon / size, cLat / size, cDepth / size);
+    return Location.create(cLat / size, cLon / size, cDepth / size);
   }
 
   /**
