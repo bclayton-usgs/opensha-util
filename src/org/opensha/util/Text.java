@@ -21,19 +21,11 @@ public class Text {
   public static final String NULL = "null";
 
   /**
-   * Whitespace {@link Splitter splitter} that omits empty strings and trims the
-   * result. Shortcut for:
-   * 
-   * <pre>
-   * Splitter.on(CharMatcher.whitespace())
-   *     .omitEmptyStrings()
-   *     .trimResults();
-   * </pre>
+   * Whitespace {@link Splitter splitter} that omits empty strings. Shortcut
+   * for: {@code Splitter.on(CharMatcher.whitespace()).omitEmptyStrings();}
    */
   public static final Splitter WHITESPACE_SPLITTER =
-      Splitter.on(CharMatcher.whitespace())
-          .omitEmptyStrings()
-          .trimResults();
+      Splitter.on(CharMatcher.whitespace()).omitEmptyStrings();
 
   /**
    * Verifies that the supplied {@code String} is neither {@code null} or empty.
