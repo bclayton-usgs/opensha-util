@@ -390,7 +390,7 @@ public interface LocationList extends List<Location> {
      * @return a new {@code LocationList}
      * @throws IllegalStateException if the list is empty
      */
-    public LocationList2 build() {
+    public LocationList build() {
       ImmutableList<Location> locs = builder.build();
       return new RegularLocationList(locs);
     }
