@@ -35,4 +35,10 @@ final class RegularLocationList extends ForwardingList<Location> implements Loca
   public LocationList reverse() {
     return new RegularLocationList(locs.reverse());
   }
+
+  @Override
+  public String toString() {
+    return Locations.toStringHelper(this);
+  }
+
 }
