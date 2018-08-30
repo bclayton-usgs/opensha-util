@@ -2,6 +2,7 @@ package org.opensha.util.geo;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.opensha.util.Text.WHITESPACE_SPLITTER;
 
 import java.util.List;
 
@@ -185,8 +186,8 @@ public interface LocationList extends List<Location> {
      * TODO Consider using rint() and/or providing a maxFlag which will keep the
      * actual spacing closer to the target spacing, albeit sometimes larger.
      * 
-     * TODO consder using round() instead of ceil() which will in some cases be closer
-     * to the target spacing, albeit greater.
+     * TODO consder using round() instead of ceil() which will in some cases be
+     * closer to the target spacing, albeit greater.
      * 
      * TODO consider immutList.Builder for resampled below
      */
@@ -200,7 +201,7 @@ public interface LocationList extends List<Location> {
       LocationVector v = LocationVector.create(start, loc);
       double distance = Locations.horzDistanceFast(start, loc);
       while (walker <= distance) {
-        resampled.add(Locations.location(start, v.azimuth(), walker));
+        resampled.add(Locations.location(start, v.azimuth, walker));
         walker += spacing;
       }
       start = loc;
@@ -213,7 +214,7 @@ public interface LocationList extends List<Location> {
 
   /**
    * Return a new list with locations in reverse order. If possible,
-   * implementations will avoid copying the list.
+   * implementations avoid copying the list.
    */
   default LocationList reverse() {
     return create(ImmutableList.copyOf(this).reverse());
@@ -275,7 +276,7 @@ public interface LocationList extends List<Location> {
   /**
    * Create a new {@code LocationList} from the supplied {@code String}. This
    * method assumes that {@code s} is formatted as one or more space-delimited
-   * {@code [lon,lat,depth]} tuples (comma-delimited); see
+   * {@code [longitude, latitude, depth]} tuples (comma-delimited); see
    * {@link Location#fromString(String)}.
    *
    * @param s {@code String} to read
@@ -283,9 +284,8 @@ public interface LocationList extends List<Location> {
    * @see Location#fromString(String)
    */
   static LocationList fromString(String s) {
-    // TODO consider updating Delimiter to use CharMatcher.whitespace()
     return create(Iterables.transform(
-        Parsing.split(checkNotNull(s), Delimiter.SPACE),
+        WHITESPACE_SPLITTER.split(checkNotNull(s)),
         Location.stringConverter().reverse()));
   }
 
