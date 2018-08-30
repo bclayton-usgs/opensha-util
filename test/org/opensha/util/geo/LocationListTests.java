@@ -11,7 +11,8 @@ import org.hamcrest.CoreMatchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opensha.util.Maths;
-import org.opensha.util.geo.LocationList.RegularLocationList;
+import org.opensha.util.geo.LocationList;
+import org.opensha.util.geo.RegularLocationList;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -19,6 +20,10 @@ import com.google.common.collect.Lists;
 import java.util.List;
 
 // TODO re-enable LocationGrid tests; check coverage
+// TODO test hashCode and Equals implementations between
+// RegularLocationList and view-based implementations in LocationGrid
+// or elsewhere
+
 
 @SuppressWarnings("javadoc")
 public class LocationListTests {
