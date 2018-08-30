@@ -15,14 +15,14 @@ import static org.opensha.util.geo.Coordinates.EARTH_RADIUS_MEAN;
 import static org.opensha.util.geo.Coordinates.LAT_RANGE;
 import static org.opensha.util.geo.Coordinates.LON_RANGE;
 
+import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
+
 import org.opensha.util.Maths;
 
 import com.google.common.base.Predicate;
 import com.google.common.math.DoubleMath;
-
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
 
 /**
  * Static utility methods to operate on geographic {@code Location} data.
@@ -124,21 +124,6 @@ public final class Locations {
     double dLat = p1.latRad - p2.latRad;
     double dLon = (p1.lonRad - p2.lonRad) * cos((p1.latRad + p2.latRad) * 0.5);
     return EARTH_RADIUS_MEAN * sqrt(dLat * dLat + dLon * dLon);
-  }
-
-  // TODO clean
-  public static void main(String[] args) {
-    // Location p1 = Location.create(40, 163);
-    // Location p2 = Location.create(40, 165);
-    // Location p3 = Location.create(40, 167);
-    // System.out.println(horzDistanceFast(p2, p1));
-    // System.out.println(horzDistanceFast(p2, p3));
-    // System.out.println(horzDistance(p2, p1));
-    // System.out.println(horzDistance(p2, p3));
-
-    // Location loc = Location.create(80, 45);
-    // Location newLoc = location(loc, NORTH.bearingRad(), 200);
-    // System.out.println(newLoc);
   }
 
   /**
