@@ -32,13 +32,13 @@ public class LocationListTests {
 
   @BeforeClass
   public static void setUp() {
-    p1 = Location.create(0, -5);
-    p2 = Location.create(-2, -3);
+    p1 = Location.create(-5, 0);
+    p2 = Location.create(-3, -2);
     p3 = Location.create(-2, -2);
     p4 = Location.create(0, 0);
     p5 = Location.create(2, 2);
-    p6 = Location.create(2, 3);
-    p7 = Location.create(0, 5);
+    p6 = Location.create(3, 2);
+    p7 = Location.create(5, 0);
 
     pp1 = Location.create(0, 0);
     pp2 = Location.create(1, 1);
@@ -47,13 +47,13 @@ public class LocationListTests {
     locs2 = LocationList.create(p1, p3, p2, p4, p6, p5, p7);
 
     g00 = Location.create(0, 0);
-    g01 = Location.create(0, 1);
-    g02 = Location.create(0, 2);
-    g03 = Location.create(0, 3);
-    g10 = Location.create(1, 0);
+    g01 = Location.create(1, 0);
+    g02 = Location.create(2, 0);
+    g03 = Location.create(3, 0);
+    g10 = Location.create(0, 1);
     g11 = Location.create(1, 1);
-    g12 = Location.create(1, 2);
-    g13 = Location.create(1, 3);
+    g12 = Location.create(2, 1);
+    g13 = Location.create(3, 1);
     // grid = LocationGrid.builder(2, 4)
     // .fillRow(0, LocationList.builder().add(g00, g01, g02, g03).build())
     // .fillRow(1, LocationList.builder().add(g10, g11, g12, g13).build())
@@ -206,8 +206,8 @@ public class LocationListTests {
     LocationList locs = LocationList.create(pp1, pp2);
     LocationVector v = LocationVector.create(135 * Maths.TO_RADIANS, 5.0, 5.0);
     LocationList transLoc = locs.translate(v);
-    Location pp1trans = Location.create(0.031795787631496104, -0.03179578273558637, 5.0);
-    Location pp2trans = Location.create(1.031800322985746, 0.9682040632704144, 5.0);
+    Location pp1trans = Location.create(-0.03179578273558637, 0.031795787631496104, 5.0);
+    Location pp2trans = Location.create(0.9682040632704144, 1.031800322985746, 5.0);
     assertEquals(pp1trans, transLoc.get(0));
     assertEquals(pp2trans, transLoc.get(1));
   }
@@ -217,9 +217,9 @@ public class LocationListTests {
     String locStr = "-117.0,34.0,0.1 -117.0,34.1,0.2 -117.1,34.0,0.3";
     LocationList locsFromString = LocationList.fromString(locStr);
     LocationList locsActual = LocationList.create(
-        Location.create(-117.0, 34.0, 0.1),
-        Location.create(-117.0, 34.1, 0.2),
-        Location.create(-117.1, 34.0, 0.3));
+        Location.create(34.0, -117.0, 0.1),
+        Location.create(34.1, -117.0, 0.2),
+        Location.create(34.0, -117.1, 0.3));
     assertEquals(locsFromString, locsActual);
   }
 
@@ -320,14 +320,14 @@ public class LocationListTests {
 
     double lon = -117.044;
     double lat = 34.001;
-    locs = b.add(lon, lat).build();
+    locs = b.add(lat, lon).build();
     assertEquals(2, locs.size());
-    assertEquals(locs.get(1), Location.create(lon, lat));
+    assertEquals(locs.get(1), Location.create(lat, lon));
 
     double depth = 3.2;
-    locs = b.add(lon, lat, depth).build();
+    locs = b.add(lat, lon, depth).build();
     assertEquals(3, locs.size());
-    assertEquals(locs.get(2), Location.create(lon, lat, depth));
+    assertEquals(locs.get(2), Location.create(lat, lon, depth));
 
     locs = b.add(p1, p2, p3).build();
     assertEquals(6, locs.size());

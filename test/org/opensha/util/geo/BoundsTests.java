@@ -20,8 +20,8 @@ public class BoundsTests {
   private static final double MAX_LAT = 10.0;
   private static final double MAX_LON = 10.0;
 
-  private static final Location MIN = Location.create(MIN_LON, MIN_LAT);
-  private static final Location MAX = Location.create(MAX_LON, MAX_LAT);
+  private static final Location MIN = Location.create(MIN_LAT, MIN_LON);
+  private static final Location MAX = Location.create(MAX_LAT, MAX_LON);
   private static final Location BAD = Location.create(0.0, 0.0);
 
   @Test
@@ -29,7 +29,7 @@ public class BoundsTests {
     Bounds b = new Bounds(MIN, MAX);
     assertSame(MIN, b.min);
     assertSame(MAX, b.max);
-    b = new Bounds(MIN_LON, MIN_LAT, MAX_LON, MAX_LAT);
+    b = new Bounds(MIN_LAT, MIN_LON, MAX_LAT, MAX_LON);
     assertEquals(MIN, b.min);
     assertEquals(MAX, b.max);
   }
@@ -40,9 +40,9 @@ public class BoundsTests {
     LocationList bList = b.toList();
     LocationList oList = LocationList.create(
         MIN,
-        Location.create(MAX_LON, MIN_LAT),
+        Location.create(MIN_LAT, MAX_LON),
         MAX,
-        Location.create(MIN_LON, MAX_LAT),
+        Location.create(MAX_LAT, MIN_LON),
         MIN);
     assertEquals(oList, bList);
   }
@@ -68,14 +68,14 @@ public class BoundsTests {
     b2 = new Bounds(BAD, MAX);
     assertNotEquals(b1, b2);
 
-    b2 = new Bounds(MIN_LON, MIN_LAT, MAX_LON, MAX_LAT);
+    b2 = new Bounds(MIN_LAT, MIN_LON, MAX_LAT, MAX_LON);
     assertEquals(b1, b2);
   }
 
   @Test
   public void hashCodeTest() {
     Bounds b1 = new Bounds(MIN, MAX);
-    Bounds b2 = new Bounds(MIN_LON, MIN_LAT, MAX_LON, MAX_LAT);
+    Bounds b2 = new Bounds(MIN_LAT, MIN_LON, MAX_LAT, MAX_LON);
     assertEquals(b1.hashCode(), b2.hashCode());
     b2 = new Bounds(0, 0, 2, 2);
     assertNotEquals(b1.hashCode(), b2.hashCode());
