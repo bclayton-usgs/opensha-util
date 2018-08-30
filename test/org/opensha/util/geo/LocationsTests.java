@@ -73,14 +73,14 @@ public class LocationsTests {
   // }
 
   // short-range, small-angle test points
-  private static Location L1 = Location.create(20.4, 32.6);
-  private static Location L2 = Location.create(20.0, 32.4);
-  private static Location L3 = Location.create(20.6, 32.2);
-  private static Location L4 = Location.create(20.2, 32.0, 10.0);
+  private static Location L1 = Location.create(32.6, 20.4);
+  private static Location L2 = Location.create(32.4, 20.0);
+  private static Location L3 = Location.create(32.2, 20.6);
+  private static Location L4 = Location.create(32.0, 20.2, 10.0);
 
   // polar and long-distance, large-angle test points
-  private static Location L5 = Location.create(0, 90);
-  private static Location L6 = Location.create(0, -90);
+  private static Location L5 = Location.create(90, 0);
+  private static Location L6 = Location.create(-90, 0);
 
   // Expected results from methods in this class were computed using the
   // class methods and compared to the results provided by one or more
@@ -165,12 +165,12 @@ public class LocationsTests {
   // same locations, different reference frame
   // distance between 1 and 2 should be the same as between 4 and 5
   // P3 and P6 are used to test distanceToLineFast
-  private static Location P1 = Location.create(-160.0, 32.0, 2.0);
-  private static Location P2 = Location.create(-163.0, 31.0, 0.0);
-  private static Location P3 = Location.create(-164.0, 33.0, 0.0);
-  private static Location P4 = Location.create(200.0, 32.0, 2.0);
-  private static Location P5 = Location.create(197.0, 31.0, 0.0);
-  private static Location P6 = Location.create(196.0, 33.0, 0.0);
+  private static Location P1 = Location.create(32.0, -160.0, 2.0);
+  private static Location P2 = Location.create(31.0, -163.0, 0.0);
+  private static Location P3 = Location.create(33.0, -164.0, 0.0);
+  private static Location P4 = Location.create(32.0, 200.0, 2.0);
+  private static Location P5 = Location.create(31.0, 197.0, 0.0);
+  private static Location P6 = Location.create(33.0, 196.0, 0.0);
 
   @Test
   public final void testHorzDistanceFast() {
@@ -193,9 +193,9 @@ public class LocationsTests {
 
   @Test
   public final void testVertDistance() {
-    Location L1 = Location.create(-32, 23, 2);
-    Location L2 = Location.create(-112, -12, -2);
-    Location L3 = Location.create( 86, -34, 10);
+    Location L1 = Location.create(23, -32, 2);
+    Location L2 = Location.create(-12, -112, -2);
+    Location L3 = Location.create(-34, 86, 10);
     assertEquals(-4, Locations.vertDistance(L1, L2), 0);
     assertEquals(8, Locations.vertDistance(L1, L3), 0);
     assertEquals(12, Locations.vertDistance(L2, L3), 0);
@@ -219,9 +219,9 @@ public class LocationsTests {
     assertEquals(21.378955649, ld13, delta);
 
     // large angles
-    Location L4 = Location.create(-20.0, 45.0, 2);
-    Location L5 = Location.create(20.0, -40.0, 17);
-    Location L6 = Location.create(20.0, -50.0, 17);
+    Location L4 = Location.create(45.0, -20.0, 2);
+    Location L5 = Location.create(-40.0, 20.0, 17);
+    Location L6 = Location.create(-50.0, 20.0, 17);
     double ld45 = Locations.linearDistance(L4, L5); // 9172.814801278
     double ld46 = Locations.linearDistance(L4, L6); // 9828.453361410
 
@@ -249,16 +249,16 @@ public class LocationsTests {
   }
 
   // additional locoations for line and segment tests
-  private static Location l1 = Location.create(0, 2);
-  private static Location l2 = Location.create(0, 4);
+  private static Location l1 = Location.create(2, 0);
+  private static Location l2 = Location.create(4, 0);
 
-  private static Location p1 = Location.create(0, 1);
-  private static Location p2 = Location.create(-1, 1);
-  private static Location p3 = Location.create(-1, 3);
-  private static Location p4 = Location.create(-1, 5);
-  private static Location p5 = Location.create(0, 5);
-  private static Location p6 = Location.create(1, 5);
-  private static Location p7 = Location.create(1, 3);
+  private static Location p1 = Location.create(1, 0);
+  private static Location p2 = Location.create(1, -1);
+  private static Location p3 = Location.create(3, -1);
+  private static Location p4 = Location.create(5, -1);
+  private static Location p5 = Location.create(5, 0);
+  private static Location p6 = Location.create(5, 1);
+  private static Location p7 = Location.create(3, 1);
   private static Location p8 = Location.create(1, 1);
 
   @Test
@@ -471,9 +471,9 @@ public class LocationsTests {
 
   @Test
   public final void testIsPole() {
-    Location sp = Location.create(0, -89.999999999999);
-    Location np = Location.create(0, 89.999999999999);
-    Location ll = Location.create(150, 22);
+    Location sp = Location.create(-89.999999999999, 0);
+    Location np = Location.create(89.999999999999, 0);
+    Location ll = Location.create(22, 150);
     assertTrue(Locations.isPole(sp));
     assertTrue(Locations.isPole(np));
     assertTrue(!Locations.isPole(ll));
@@ -485,16 +485,16 @@ public class LocationsTests {
     // different magnitude constraints on depth vs. lat lon
     Location p1, p2;
     // compare lats
-    p1 = Location.create(0, 30, 0);
-    p2 = Location.create(0, 30.000000000001, 0);
+    p1 = Location.create(30, 0, 0);
+    p2 = Location.create(30.000000000001, 0, 0);
     assertTrue(Locations.areSimilar(p1, p2));
-    p2 = Location.create(0, 30.00000000001, 0);
+    p2 = Location.create(30.00000000001, 0, 0);
     assertTrue(!Locations.areSimilar(p1, p2));
     // compare lons
-    p1 = Location.create(-30.0, 0, 0);
-    p2 = Location.create(-30.000000000001, 0, 0);
+    p1 = Location.create(0, -30.0, 0);
+    p2 = Location.create(0, -30.000000000001, 0);
     assertTrue(Locations.areSimilar(p1, p2));
-    p2 = Location.create(-30.00000000001, 0, 0);
+    p2 = Location.create(0, -30.00000000001, 0);
     assertTrue(!Locations.areSimilar(p1, p2));
     // compare depths
     p1 = Location.create(0, 0, 5.0);
@@ -507,9 +507,9 @@ public class LocationsTests {
   @Test
   public void testBounds() {
     Location p1 = Location.create(-10.0, -10.0);
-    Location p2 = Location.create(10.0, -10.0);
+    Location p2 = Location.create(-10.0, 10.0);
     Location p3 = Location.create(10.0, 10.0);
-    Location p4 = Location.create(-10.0, 10.0);
+    Location p4 = Location.create(10.0, -10.0);
     LocationList locs = LocationList.create(p1, p2, p3, p4);
     Bounds b = Locations.bounds(locs);
     Location min = Location.create(-10.0, -10.0);
@@ -547,13 +547,13 @@ public class LocationsTests {
     // VALUE GENERATION
     // ==========================================================
 
-    L1 = Location.create(20.4, 32.6);
-    L2 = Location.create(20.0, 32.4);
-    L3 = Location.create(20.6, 32.2);
-    L4 = Location.create(20.2, 32.0, 10.0);
+    L1 = Location.create(32.6, 20.4);
+    L2 = Location.create(32.4, 20.0);
+    L3 = Location.create(32.2, 20.6);
+    L4 = Location.create(32.0, 20.2, 10.0);
 
-    L5 = Location.create(0, 90);
-    L6 = Location.create(0, -90);
+    L5 = Location.create(90, 0);
+    L6 = Location.create(-90, 0);
 
     // vd sd fsd angle az-rad az-deg
     // d51 6393.578 km 6382.596 6474.888 1.001818991 3.141592654 180.0
@@ -604,9 +604,9 @@ public class LocationsTests {
     //
     // ==========================================================
 
-    L2 = Location.create(-116, 32);
-    L1 = Location.create(-115, 37);
-    L3 = Location.create(-114, 34);
+    L2 = Location.create(32, -116);
+    L1 = Location.create(37, -115);
+    L3 = Location.create(34, -114);
 
     System.out.println("\nSPEED TEST -- Distance to Line\n");
     System.out.println("distanceToLine(): " + Locations.distanceToLine(L1, L2, L3));
@@ -1043,7 +1043,7 @@ public class LocationsTests {
     double lon = L1.longitude;
     for (int i = 0; i <= numPoints; i++) {
       // System.out.println(lat + " " + lon);
-      llb.add(Location.create(lon, lat));
+      llb.add(Location.create(lat, lon));
       lat += dLat;
       lon += dLon;
     }
@@ -1292,7 +1292,7 @@ public class LocationsTests {
     // double newDepth = depth + -1*vertDistance;
     double newDepth = depth + vertDistance;
 
-    Location newLoc = Location.create(newLon, newLat, newDepth);
+    Location newLoc = Location.create(newLat, newLon, newDepth);
     return newLoc;
   }
 

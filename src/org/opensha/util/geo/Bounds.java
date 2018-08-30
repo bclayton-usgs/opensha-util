@@ -33,7 +33,7 @@ public final class Bounds {
   }
 
   Bounds(double minLon, double minLat, double maxLon, double maxLat) {
-    this(Location.create(minLon, minLat), Location.create(maxLon, maxLat));
+    this(Location.create(minLat, minLon), Location.create(maxLat, maxLon));
   }
 
   /**
@@ -43,9 +43,9 @@ public final class Bounds {
   public LocationList toList() {
     return LocationList.create(
         min,
-        Location.create(max.longitude, min.latitude),
+        Location.create(min.latitude, max.longitude),
         max,
-        Location.create(min.longitude, max.latitude),
+        Location.create(max.latitude, min.longitude),
         min);
   }
 
