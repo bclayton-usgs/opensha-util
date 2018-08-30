@@ -11,9 +11,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Doubles;
 
-import gov.usgs.earthquake.nshmp.internal.Parsing;
-import gov.usgs.earthquake.nshmp.internal.Parsing.Delimiter;
-
 /**
  * A list of {@link Location}s.
  * 
@@ -79,7 +76,7 @@ public interface LocationList extends List<Location> {
   default double depth() {
     double depth = 0.0;
     for (Location loc : this) {
-      depth += loc.depth();
+      depth += loc.depth;
     }
     return depth / size();
   }
@@ -116,7 +113,7 @@ public interface LocationList extends List<Location> {
    *
    * @param length target length of sub-lists
    */
-  default List<LocationList2> partition(double length) {
+  default List<LocationList> partition(double length) {
     checkArgument(
         Doubles.isFinite(length) && length > 0.0,
         "Length must be positive, real number");
@@ -126,11 +123,11 @@ public interface LocationList extends List<Location> {
       return ImmutableList.of(this);
     }
 
-    ImmutableList.Builder<LocationList2> partitions = ImmutableList.builder();
+    ImmutableList.Builder<LocationList> partitions = ImmutableList.builder();
     double partitionLength = totalLength / Math.rint(totalLength / length);
 
     double[] distances = distances();
-    LocationList2.Builder partition = LocationList2.builder();
+    LocationList.Builder partition = LocationList.builder();
     double residual = 0.0;
     for (int i = 0; i < distances.length; i++) {
       Location start = get(i);
@@ -147,10 +144,10 @@ public interface LocationList extends List<Location> {
           break;
         }
         LocationVector v = LocationVector.create(start, get(i + 1));
-        Location end = Locations.location(start, v.azimuth(), partitionLength - residual);
+        Location end = Locations.location(start, v.azimuth, partitionLength - residual);
         partition.add(end);
         partitions.add(partition.build());
-        partition = LocationList2.builder();
+        partition = LocationList.builder();
         partition.add(end);
         start = end;
         distance -= partitionLength;
@@ -174,7 +171,7 @@ public interface LocationList extends List<Location> {
    *
    * @param spacing resample interval
    */
-  default LocationList2 resample(double spacing) {
+  default LocationList resample(double spacing) {
     checkArgument(
         Doubles.isFinite(spacing) && spacing > 0.0,
         "Spacing must be positive, real number");
@@ -211,14 +208,14 @@ public interface LocationList extends List<Location> {
     }
     // replace last point to be exact
     resampled.set(resampled.size() - 1, this.last());
-    return LocationList2.create(resampled);
+    return LocationList.create(resampled);
   }
 
   /**
    * Return a new list with locations in reverse order. If possible,
    * implementations will avoid copying the list.
    */
-  default LocationList2 reverse() {
+  default LocationList reverse() {
     return create(ImmutableList.copyOf(this).reverse());
   }
 
@@ -228,10 +225,10 @@ public interface LocationList extends List<Location> {
    *
    * @param vector to translate list by
    */
-  default LocationList2 translate(LocationVector vector) {
+  default LocationList translate(LocationVector vector) {
     // TODO consider adding translate to LocationVector
+    // --> .map(vector::translate)
     return create(this.stream()
-        // .map(vector::translate)
         .map(loc -> Locations.location(loc, vector))
         .collect(ImmutableList.toImmutableList()));
 
@@ -252,7 +249,7 @@ public interface LocationList extends List<Location> {
    * @param locations to populate list with
    * @throws IllegalArgumentException if {@code locations} is empty
    */
-  static LocationList2 create(Location... locations) {
+  static LocationList create(Location... locations) {
     return builder().add(locations).build();
   }
 
@@ -264,10 +261,10 @@ public interface LocationList extends List<Location> {
    * @param locations to populate list with
    * @throws IllegalArgumentException if {@code locations} is empty
    */
-  static LocationList2 create(Iterable<Location> locations) {
+  static LocationList create(Iterable<Location> locations) {
     checkArgument(locations.iterator().hasNext(), "locations may not be empty");
     if (locations instanceof LocationList) {
-      return (LocationList2) locations;
+      return (LocationList) locations;
     }
     if (locations instanceof ImmutableList) {
       return new RegularLocationList((ImmutableList<Location>) locations);
@@ -285,7 +282,7 @@ public interface LocationList extends List<Location> {
    * @return a new {@code LocationList}
    * @see Location#fromString(String)
    */
-  static LocationList2 fromString(String s) {
+  static LocationList fromString(String s) {
     // TODO consider updating Delimiter to use CharMatcher.whitespace()
     return create(Iterables.transform(
         Parsing.split(checkNotNull(s), Delimiter.SPACE),
@@ -301,7 +298,6 @@ public interface LocationList extends List<Location> {
     return new Builder();
   }
 
-  // TODO check if @VisibleForTesting is needed
   /**
    * A reusable builder of {@code LocationList}s. Repeat calls to
    * {@code build()} will return multiple lists in series with each new list
@@ -312,6 +308,7 @@ public interface LocationList extends List<Location> {
    */
   public static final class Builder {
 
+    // TODO check if @VisibleForTesting is needed
     @VisibleForTesting
     ImmutableList.Builder<Location> builder;
 

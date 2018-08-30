@@ -1,4 +1,4 @@
-package gov.usgs.earthquake.nshmp.geo;
+package org.opensha.util.geo;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableList;
  * 
  * @author Peter Powers
  */
-final class RegularLocationList extends ForwardingList<Location> implements LocationList2 {
+final class RegularLocationList extends ForwardingList<Location> implements LocationList {
 
   final ImmutableList<Location> locs;
 
@@ -27,8 +27,7 @@ final class RegularLocationList extends ForwardingList<Location> implements Loca
   }
   
   @Override
-  public LocationList2 reverse() {
+  public LocationList reverse() {
     return new RegularLocationList(locs.reverse());
   }
-  
 }
