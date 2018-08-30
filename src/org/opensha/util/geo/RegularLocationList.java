@@ -25,7 +25,12 @@ final class RegularLocationList extends ForwardingList<Location> implements Loca
   protected List<Location> delegate() {
     return locs;
   }
-  
+
+  @Override
+  public boolean equals(Object obj) {
+    return super.equals(obj) && (obj instanceof LocationList);
+  }
+
   @Override
   public LocationList reverse() {
     return new RegularLocationList(locs.reverse());
