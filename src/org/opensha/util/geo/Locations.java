@@ -1,5 +1,6 @@
 package org.opensha.util.geo;
 
+import static org.opensha.util.Text.NEWLINE;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
@@ -21,6 +22,7 @@ import java.awt.geom.Rectangle2D;
 
 import org.opensha.util.Maths;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.math.DoubleMath;
 
@@ -823,6 +825,11 @@ public final class Locations {
     double minLat = max(loc.latitude - Δlat, LAT_RANGE.lowerEndpoint());
     double maxLat = min(loc.latitude + Δlat, LAT_RANGE.upperEndpoint());
     return new Rectangle2D.Double(minLon, minLat, maxLon - minLon, maxLat - minLat);
+  }
+  
+  /* Helper method for LocationList implementations */
+  static String toStringHelper(LocationList locations) {
+    return NEWLINE + Joiner.on(NEWLINE).join(locations) + NEWLINE;
   }
 
 }
