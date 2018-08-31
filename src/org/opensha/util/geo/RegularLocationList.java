@@ -17,7 +17,7 @@ final class RegularLocationList extends ForwardingList<Location> implements Loca
   final ImmutableList<Location> locs;
 
   RegularLocationList(ImmutableList<Location> locs) {
-    checkArgument(locs.size() > 0, "LocationList is empty");
+    checkArgument(locs.size() > 0, "Location lists may not by empty");
     this.locs = locs;
   }
 
