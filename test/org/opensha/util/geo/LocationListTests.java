@@ -7,18 +7,20 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.opensha.util.Text.NEWLINE;
 
+import java.util.List;
+
 import org.hamcrest.CoreMatchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opensha.util.Maths;
-import org.opensha.util.geo.LocationList.RegularLocationList;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-import java.util.List;
-
 // TODO re-enable LocationGrid tests; check coverage
+// TODO test hashCode and Equals implementations between
+// RegularLocationList and view-based implementations in LocationGrid
+// or elsewhere
 
 @SuppressWarnings("javadoc")
 public class LocationListTests {
@@ -27,7 +29,7 @@ public class LocationListTests {
   private static Location p1, p2, p3, p4, p5, p6, p7;
   private static Location pp1, pp2;
 
-  private static Location g00, g01, g02, g03, g10, g11, g12, g13;
+  // private static Location g00, g01, g02, g03, g10, g11, g12, g13;
   // static LocationGrid grid;
 
   @BeforeClass
@@ -46,14 +48,14 @@ public class LocationListTests {
     locs1 = LocationList.create(p1, p2, p3, p4, p5, p6, p7);
     locs2 = LocationList.create(p1, p3, p2, p4, p6, p5, p7);
 
-    g00 = Location.create(0, 0);
-    g01 = Location.create(1, 0);
-    g02 = Location.create(2, 0);
-    g03 = Location.create(3, 0);
-    g10 = Location.create(0, 1);
-    g11 = Location.create(1, 1);
-    g12 = Location.create(2, 1);
-    g13 = Location.create(3, 1);
+    // g00 = Location.create(0, 0);
+    // g01 = Location.create(1, 0);
+    // g02 = Location.create(2, 0);
+    // g03 = Location.create(3, 0);
+    // g10 = Location.create(0, 1);
+    // g11 = Location.create(1, 1);
+    // g12 = Location.create(2, 1);
+    // g13 = Location.create(3, 1);
     // grid = LocationGrid.builder(2, 4)
     // .fillRow(0, LocationList.builder().add(g00, g01, g02, g03).build())
     // .fillRow(1, LocationList.builder().add(g10, g11, g12, g13).build())
@@ -238,10 +240,15 @@ public class LocationListTests {
     // implementation, check that too
     List<Location> locs = ImmutableList.copyOf(locs1);
     assertEquals(locs.hashCode(), locs1.hashCode());
+
+    // TODO hash codes for concrete and view lists
   }
 
   @Test
   public final void equalsTest() {
+    // some of these predate delegation of equals to backing
+    // List implementation
+
     assertEquals(locs1, locs1);
     LocationList equal = null;
     assertNotEquals(locs1, equal);
@@ -253,6 +260,10 @@ public class LocationListTests {
     // size check
     equal = LocationList.create(p1, p2, p3, p4, p5);
     assertNotEquals(locs1, equal);
+
+    // check that ImmutableList is not equal to LocationList of same Locations
+    List<Location> equalList = ImmutableList.of(p1, p2, p3, p4, p5, p6, p7);
+    assertNotEquals(locs1, equalList);
   }
 
   @Test
@@ -358,8 +369,8 @@ public class LocationListTests {
     LocationList.builder().addAll(locs);
   }
 
-  @Test(expected = IllegalStateException.class)
-  public final void builderBuild_ISE() {
+  @Test(expected = IllegalArgumentException.class)
+  public final void builderBuild_IAE() {
     LocationList.builder().build();
   }
 

@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-  compile('com.google.guava:guava:26.0') {
+  compile('com.google.guava:guava:26.0-jre') {
     /* skip optional guava dependencies */
     transitive = false
   }
